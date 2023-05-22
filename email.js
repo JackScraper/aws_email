@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 
-const ses = new AWS.SES({ region: 'us-east-1' });
+const ses = new AWS.SES({ region: 'g' });
 
 export const handler = async (event) => {
 
