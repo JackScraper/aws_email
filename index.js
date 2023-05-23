@@ -6,7 +6,6 @@ const ses = new AWS.SES({ region: 'us-east-1' });
 export const handler = async (event) => {
 
     const emailBody = fs.readFileSync('message/index.html', 'utf-8')
-
     const userName = event.user.name;
     const userEmail = event.user.email;
     const customizedHtmlBody = emailBody.replace('{{userName}}', userName).replace('{{userEmail}}', userEmail);
