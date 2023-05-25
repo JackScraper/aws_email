@@ -1,56 +1,36 @@
-import AWS from 'aws-sdk';
-import fs from 'fs';
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
-const ses = new AWS.SES({ region: 'us-east-1' });
+const sesClient = new SESClient({ region: "us-east-1" });
 
 export const handler = async (event) => {
 
-    const emailBody = fs.readFileSync('message/index.html', 'utf-8')
-    const userName = event.user.name;
-    const userEmail = event.user.email;
-    const customizedHtmlBody = emailBody.replace('{{userName}}', userName).replace('{{userEmail}}', userEmail);
-
-    const msgTitle = `Hi ${event.user.name}!`;
-
-    // Print the segment data to the console
-    console.log('name', event.user.name);
-    console.log('email', event.user.email);
-
-    const email = event.user.email; // Who needs to send
-
+    // Hardcoded variables
+    const receiverEmail = event.user.email; // Receiver EMAIL
+    const emailTitle = `Hi ${event.user.name}!`; // Email title
     const params = {
         Destination: {
-            ToAddresses: [email],
+            ToAddresses: [receiverEmail]
         },
         Message: {
             Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: customizedHtmlBody // Use the HTML template content
+                Text: {
+                    Data: event.user.body // email message
                 }
             },
             Subject: {
-                Data: msgTitle, // Msg title
-            },
+                Data: emailTitle
+            }
         },
-        Source: 'ivankrylov322@gmail.com', // Sender Email
+        Source: 'ivankrylov322@gmail.com' // email from which messages will be sent
     };
 
     try {
-        await ses.sendEmail(params).promise();
-
-        console.log('Message sent successfully');
-
-        return {
-            statusCode: 200,
-            body: 'Message sent successfully',
-        };
+        const command = new SendEmailCommand(params);
+        const response = await sesClient.send(command);
+        console.log("Email sent:", response.MessageId);
+        return `Email sent: ${response.MessageId}`
     } catch (error) {
-        console.error('Error sending message:', error);
-
-        return {
-            statusCode: 500,
-            body: 'Error sending message',
-        };
+        console.error("Error sending email:", error);
+        return `Error: ${error}`
     }
 };

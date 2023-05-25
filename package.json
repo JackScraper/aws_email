@@ -10,6 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.337.0",
     "aws-sdk": "^2.1378.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.21.5",
+    "babel-jest": "^29.5.0",
+    "esm": "^3.2.25",
+    "jest": "^29.5.0"
   }
 }
