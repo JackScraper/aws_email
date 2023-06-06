@@ -1,6 +1,5 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
 const sesClient = new SESClient({ region: 'us-east-1' })
-
 export const handler = async (event) => {
   // Hardcoded variables
   const receiverEmail = event.user.email // Receiver EMAIL
