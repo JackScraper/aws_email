@@ -22,7 +22,6 @@ export const handler = async (event) => {
     Source: 'ivankrylov322@gmail.com' // email from which messages will be sent
 
   }
-
   try {
     const command = new SendEmailCommand(params)
     const response = await sesClient.send(command)
